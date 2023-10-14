@@ -15,9 +15,9 @@ int _printf(const char *format, ...)
 	if (format == NULL)
 		return (-1);
 	va_start(list, format);
-	for (i = 0; format[i] != '\0'; i++)
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (*format != '%')
+		if (format[i] != '%')
 		{
 			buffer[index++] = format[i];
 			if (index == BUFF_SIZE)
@@ -48,7 +48,7 @@ int _printf(const char *format, ...)
  * printb - Prints the contents of the buffer if it exist
  * @buffer: Array of chars
  * @buff_ind: Index at which to add next char, represents the length.
- */
+ **/
 void printb(char buffer[], int *buff_ind)
 {
 	if (*buff_ind > 0)

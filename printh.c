@@ -11,7 +11,7 @@
  * @size: Size specifier
  * Return: 1 or 2;
  **/
-int printh(const char *format, int *ind, va_list list, char buffer[],
+int printh(const char *fmt, int *ind, va_list list, char buffer[],
 	int flags, int width, int precision, int size)
 {
 	int i, unknow_len = 0, printed_chars = -1;
@@ -23,28 +23,27 @@ int printh(const char *format, int *ind, va_list list, char buffer[],
 		{'r', print_reverse}, {'R', print_rot13string}, {'\0', NULL}
 	};
 	for (i = 0; fmt_types[i].fmt != '\0'; i++)
-		if (format[*ind] == fmt_types[i].fmt)
+		if (fmt[*ind] == fmt_types[i].fmt)
 			return (fmt_types[i].fn(list, buffer, flags, width, precision, size));
 
 	if (fmt_types[i].fmt == '\0')
 	{
-		if (format[*ind] == '\0')
+		if (fmt[*ind] == '\0')
 			return (-1);
 		unknow_len += write(1, "%%", 1);
-		if (format[*ind - 1] == ' ')
+		if (fmt[*ind - 1] == ' ')
 			unknow_len += write(1, " ", 1);
 		else if (width)
 		{
 			--(*ind);
-			while (format[*ind] != ' ' && format[*ind] != '%')
+			while (fmt[*ind] != ' ' && fmt[*ind] != '%')
 				--(*ind);
-			if (format[*ind] == ' ')
+			if (fmt[*ind] == ' ')
 				--(*ind);
 			return (1);
 		}
-		unknow_len += write(1, &format[*ind], 1);
+		unknow_len += write(1, &fmt[*ind], 1);
 		return (unknow_len);
 	}
 	return (printed_chars);
 }
-
