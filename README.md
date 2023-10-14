@@ -1,3 +1,0 @@
-C - printf
-
-yoo
