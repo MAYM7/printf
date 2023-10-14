@@ -1,7 +1,7 @@
 #include "main.h"
 /**
  * printh - Prints an argument based on its type
- * @format: Formatted string in which to print the arguments.
+ * @fmt: Formatted string in which to print the arguments.
  * @list: List of arguments to be printed.
  * @ind: index.
  * @buffer: Buffer array to handle print.
