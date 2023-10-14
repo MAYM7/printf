@@ -1,4 +1,5 @@
 #include "main.h"
+void printb(char buffer[], int *buff_ind);
 /**
  * _printf - a function like printf.
  * @format: first arg.
@@ -6,49 +7,52 @@
  **/
 int _printf(const char *format, ...)
 {
-	int ch = 0;
+	int i, ch = 0, pch = 0;
+	int flags, wid, pre, size, index = 0;
 	va_list list;
+	char buffer[BUFF_SIZE];
 
 	if (format == NULL)
 		return (-1);
 	va_start(list, format);
-	while (*format)
+	for (i = 0; format[i] != '\0'; i++)
 	{
 		if (*format != '%')
 		{
-			write(1, format, 1);
-				ch++;
+			buffer[index++] = format[i];
+			if (index == BUFF_SIZE)
+				printb(buffer, &index);
+			ch++;
 		}
 		else
 		{
-			format++;
-			if (*format == '\0')
-				break;
-			if (*format == '%')
-			{
-				write(1, format, 1);
-				ch++;
-			}
-			if (*format == 'c')
-			{
-				char c = va_arg(list, int);
-
-				write(1, &c, 1);
-				ch++;
-			}
-			if (*format == 's')
-			{
-				char *str = va_arg(list, char*);
-				int len = 0; 
-					
-					while (str[len] != '\0')
-						len++;
-					write(1, str, len);
-					ch += len;
-			}
+			printb(buffer, &index);
+			flags = _flags(format, &i);
+			wid = _wid(format, &i, list);
+			pre = _pre(format, &i, list);
+			size = _size(format, &i);
+			i++;
+			pch = printh(format, &i, list, buffer,
+					flags, wid, pre, size);
+			if (pch == -1)
+				return (-1);
+			ch += pch;
 		}
-		format++;
 	}
+	printb(buffer, &index);
 	va_end(list);
 	return (ch);
+}
+
+/**
+ * printb - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void printb(char buffer[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+
+	*buff_ind = 0;
 }
